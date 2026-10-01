@@ -1,35 +1,35 @@
 const STORAGE_KEY="master_app_v1";
 
 const catalog=[
-  {id:"pushups",category:"arms",name:"Классические отжимания",type:"reps",defaultReps:12,description:"Грудь, трицепс и передняя дельта."},
-  {id:"diamond_pushups",category:"arms",name:"Узкие отжимания",type:"reps",defaultReps:8,description:"Акцент на трицепс; ладони ближе друг к другу."},
-  {id:"pike_pushups",category:"arms",name:"Отжимания уголком",type:"reps",defaultReps:8,description:"Плечи и верх корпуса; таз поднят вверх."},
-  {id:"chair_dips",category:"arms",name:"Обратные отжимания от стула",type:"reps",defaultReps:10,description:"Трицепс. Нужен устойчивый стул или край дивана."},
-  {id:"shoulder_taps",category:"arms",name:"Касания плеч в упоре",type:"reps",defaultReps:20,description:"Плечи, руки и стабилизация корпуса."},
+  {id:"pushups",category:"arms",name:"Отжимания",type:"reps",defaultReps:12,description:"Обычные отжимания от пола."},
+  {id:"knee_pushups",category:"arms",name:"Отжимания с колен",type:"reps",defaultReps:12,description:"Более лёгкий вариант отжиманий."},
+  {id:"wide_pushups",category:"arms",name:"Широкие отжимания",type:"reps",defaultReps:10,description:"Ладони шире плеч."},
+  {id:"narrow_pushups",category:"arms",name:"Узкие отжимания",type:"reps",defaultReps:8,description:"Ладони ближе к корпусу."},
+  {id:"wall_pushups",category:"arms",name:"Отжимания от стены",type:"reps",defaultReps:15,description:"Самый простой вариант отжиманий."},
 
-  {id:"squats",category:"legs",name:"Приседания",type:"reps",defaultReps:15,description:"Базовое упражнение на бёдра и ягодицы."},
-  {id:"reverse_lunges",category:"legs",name:"Выпады назад",type:"reps",defaultReps:12,description:"Поочерёдные выпады назад, нагрузка на ноги и ягодицы."},
-  {id:"glute_bridge",category:"legs",name:"Ягодичный мост",type:"reps",defaultReps:15,description:"Ягодицы и задняя поверхность бедра."},
-  {id:"calf_raises",category:"legs",name:"Подъёмы на носки",type:"reps",defaultReps:20,description:"Икры; можно выполнять у стены для баланса."},
-  {id:"wall_sit",category:"legs",name:"Стульчик у стены",type:"time",defaultSeconds:40,description:"Статическая нагрузка на квадрицепсы и ягодицы."},
+  {id:"squats",category:"legs",name:"Приседания",type:"reps",defaultReps:15,description:"Классические приседания."},
+  {id:"forward_lunges",category:"legs",name:"Выпады вперёд",type:"reps",defaultReps:10,description:"Поочерёдные выпады на каждую ногу."},
+  {id:"reverse_lunges",category:"legs",name:"Выпады назад",type:"reps",defaultReps:10,description:"Шаг назад и возврат в исходное положение."},
+  {id:"glute_bridge",category:"legs",name:"Ягодичный мост",type:"reps",defaultReps:15,description:"Подъём таза лёжа на спине."},
+  {id:"calf_raises",category:"legs",name:"Подъёмы на носки",type:"reps",defaultReps:20,description:"Подъём на носки стоя."},
 
-  {id:"crunches",category:"abs",name:"Скручивания",type:"reps",defaultReps:20,description:"Прямые мышцы живота."},
-  {id:"dead_bug",category:"abs",name:"Мёртвый жук",type:"reps",defaultReps:16,description:"Контроль корпуса и глубокие мышцы живота."},
-  {id:"bicycle",category:"abs",name:"Велосипед",type:"reps",defaultReps:20,description:"Пресс и косые мышцы живота."},
-  {id:"leg_raises",category:"abs",name:"Подъёмы ног лёжа",type:"reps",defaultReps:12,description:"Нижняя часть пресса и сгибатели бедра."},
-  {id:"plank",category:"abs",name:"Планка",type:"time",defaultSeconds:45,description:"Статическая работа всего корпуса."},
+  {id:"crunches",category:"abs",name:"Скручивания",type:"reps",defaultReps:20,description:"Классическое упражнение на пресс."},
+  {id:"leg_raises",category:"abs",name:"Подъёмы ног лёжа",type:"reps",defaultReps:12,description:"Поднимай прямые или слегка согнутые ноги."},
+  {id:"bicycle",category:"abs",name:"Велосипед",type:"reps",defaultReps:20,description:"Поочерёдное движение локоть-колено."},
+  {id:"plank",category:"abs",name:"Планка",type:"time",defaultSeconds:40,description:"Удержание корпуса в упоре."},
+  {id:"heel_touches",category:"abs",name:"Касания пяток",type:"reps",defaultReps:20,description:"Лёжа, поочерёдно тянись рукой к пятке."},
 
-  {id:"jumping_jacks",category:"cardio",name:"Джампинг-джек",type:"time",defaultSeconds:40,description:"Разогрев и повышение пульса."},
-  {id:"high_knees",category:"cardio",name:"Бег с высоким подниманием колен",type:"time",defaultSeconds:35,description:"Интенсивное кардио на месте."},
-  {id:"mountain_climbers",category:"cardio",name:"Альпинист",type:"time",defaultSeconds:35,description:"Кардио плюс нагрузка на корпус и плечи."},
-  {id:"skaters",category:"cardio",name:"Конькобежец",type:"time",defaultSeconds:40,description:"Боковые прыжки для координации и выносливости."},
-  {id:"shadow_boxing",category:"cardio",name:"Бой с тенью",type:"time",defaultSeconds:60,description:"Кардио без инвентаря; двигайся и работай руками."},
+  {id:"jumping_jacks",category:"cardio",name:"Прыжки ноги вместе-врозь",type:"time",defaultSeconds:40,description:"Простое кардио на месте."},
+  {id:"running_place",category:"cardio",name:"Бег на месте",type:"time",defaultSeconds:45,description:"Лёгкий бег без перемещения."},
+  {id:"high_knees",category:"cardio",name:"Бег с высокими коленями",type:"time",defaultSeconds:35,description:"Поднимай колени выше обычного."},
+  {id:"small_jumps",category:"cardio",name:"Прыжки на месте",type:"time",defaultSeconds:30,description:"Небольшие пружинистые прыжки."},
+  {id:"mountain_climbers",category:"cardio",name:"Альпинист",type:"time",defaultSeconds:30,description:"Поочерёдно подтягивай колени в упоре лёжа."},
 
-  {id:"hamstring_stretch",category:"stretch",name:"Наклон к прямым ногам",type:"time",defaultSeconds:30,description:"Задняя поверхность бедра и поясница."},
-  {id:"quad_stretch",category:"stretch",name:"Растяжка квадрицепса стоя",type:"time",defaultSeconds:30,description:"Передняя поверхность бедра; поочерёдно на каждую ногу."},
-  {id:"chest_opener",category:"stretch",name:"Раскрытие грудных мышц",type:"time",defaultSeconds:30,description:"Грудь и передняя поверхность плеч."},
-  {id:"child_pose",category:"stretch",name:"Поза ребёнка",type:"time",defaultSeconds:40,description:"Спина, плечи и мягкое расслабление корпуса."},
-  {id:"hip_flexor_stretch",category:"stretch",name:"Растяжка сгибателей бедра",type:"time",defaultSeconds:30,description:"Глубокий выпад с мягким смещением таза вперёд."}
+  {id:"toe_touch_standing",category:"stretch",name:"Наклон к ногам стоя",type:"time",defaultSeconds:30,description:"Мягко тянись руками к стопам."},
+  {id:"toe_touch_sitting",category:"stretch",name:"Наклон к ногам сидя",type:"time",defaultSeconds:30,description:"Сиди с прямыми ногами и тянись вперёд."},
+  {id:"quad_stretch",category:"stretch",name:"Растяжка бедра стоя",type:"time",defaultSeconds:30,description:"Подтяни стопу к ягодице."},
+  {id:"shoulder_stretch",category:"stretch",name:"Растяжка плеча",type:"time",defaultSeconds:30,description:"Прижми прямую руку к груди."},
+  {id:"child_pose",category:"stretch",name:"Растяжка спины",type:"time",defaultSeconds:40,description:"Сядь на пятки и тяни руки вперёд."}
 ];
 
 const catalogCategories=[
@@ -93,9 +93,15 @@ function renderWorkoutHome(app){
     const card=document.createElement("div"); card.className="workout-card";
     const reps=w.exercises.reduce((sum,e)=>sum+(e.type==="reps"?e.reps*e.sets:0),0);
     card.innerHTML=`<div><h4>${escapeHtml(w.name)}</h4><div class="workout-meta">${w.exercises.length} упражнений · ${reps} повт.</div></div>
-      <div class="workout-actions"><button class="mini-btn" data-edit>✎</button><button class="mini-btn" data-start>▶</button></div>`;
+      <div class="workout-actions"><button class="mini-btn" data-edit aria-label="Редактировать">✎</button><button class="mini-btn" data-start aria-label="Начать">▶</button><button class="mini-btn delete-template-btn" data-delete aria-label="Удалить">×</button></div>`;
     card.querySelector("[data-edit]").onclick=()=>{builder=JSON.parse(JSON.stringify(w));builder.index=index;route="builder";render()};
     card.querySelector("[data-start]").onclick=()=>startSession(JSON.parse(JSON.stringify(w)));
+    card.querySelector("[data-delete]").onclick=()=>{
+      if(!confirm(`Удалить шаблон «${w.name}»?`))return;
+      state.workouts.splice(index,1);
+      saveState();
+      render();
+    };
     list.append(card);
   });
 }
