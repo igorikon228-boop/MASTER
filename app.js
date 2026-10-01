@@ -10,7 +10,7 @@ const catalog=[
 ];
 
 const defaultState={
-  profile:{name:"",height:"",weight:""},
+  profile:{name:"",height:"",weight:"",saved:false},
   workouts:[],
   history:[]
 };
@@ -22,7 +22,12 @@ let session=null;
 let sessionTick=null;
 
 function loadState(){
-  try{return {...defaultState,...JSON.parse(localStorage.getItem(STORAGE_KEY))}}catch{return structuredClone(defaultState)}
+  try{
+    const stored=JSON.parse(localStorage.getItem(STORAGE_KEY))||{};
+    const profile={...defaultState.profile,...(stored.profile||{})};
+    if(profile.saved===undefined)profile.saved=Boolean(profile.name||profile.height||profile.weight);
+    return {...defaultState,...stored,profile};
+  }catch{return structuredClone(defaultState)}
 }
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function el(id){return document.getElementById(id)}
@@ -32,12 +37,14 @@ function setNav(active){
 }
 function render(){
   const app=el("app"); app.innerHTML="";
-  setNav(route==="profile"?"profile":"workout");
+  setNav(["workout","profile","settings"].includes(route)?route:"workout");
   if(route==="workout")renderWorkoutHome(app);
   if(route==="builder")renderBuilder(app);
   if(route==="session")renderSession(app);
   if(route==="result")renderResult(app);
   if(route==="profile")renderProfile(app);
+  if(route==="settings")renderSettings(app);
+  if(route==="profile-edit")renderProfileEdit(app);
 }
 function renderWorkoutHome(app){
   app.append(cloneTemplate("workoutTemplate"));
@@ -225,13 +232,49 @@ function renderResult(app){
 }
 function renderProfile(app){
   app.append(cloneTemplate("profileTemplate"));
-  el("profileName").value=state.profile.name||"";
-  el("profileHeight").value=state.profile.height||"";
-  el("profileWeight").value=state.profile.weight||"";
-  el("saveProfileBtn").onclick=()=>{
-    state.profile={name:el("profileName").value.trim(),height:el("profileHeight").value,weight:el("profileWeight").value};
-    saveState();alert("Профиль сохранён");
-  };
+  const card=el("profileCard");
+  if(state.profile.saved){
+    card.innerHTML=`
+      <div class="profile-summary">
+        <div class="profile-avatar">${escapeHtml((state.profile.name||"M").slice(0,1).toUpperCase())}</div>
+        <div>
+          <p class="muted small">Имя</p>
+          <h3>${escapeHtml(state.profile.name||"Без имени")}</h3>
+        </div>
+      </div>
+      <div class="profile-params">
+        <div><span>Рост</span><strong>${state.profile.height?escapeHtml(state.profile.height)+" см":"—"}</strong></div>
+        <div><span>Вес</span><strong>${state.profile.weight?escapeHtml(state.profile.weight)+" кг":"—"}</strong></div>
+      </div>`;
+  } else {
+    card.innerHTML=`
+      <p class="muted">Заполни профиль один раз. После сохранения изменить данные можно будет в настройках.</p>
+      <label class="field profile-first-field">
+        <span>Имя</span>
+        <input id="profileName" type="text" maxlength="40" placeholder="Твоё имя" />
+      </label>
+      <div class="two-col">
+        <label class="field">
+          <span>Рост, см</span>
+          <input id="profileHeight" type="number" min="100" max="250" inputmode="numeric" />
+        </label>
+        <label class="field">
+          <span>Вес, кг</span>
+          <input id="profileWeight" type="number" min="30" max="300" step="0.1" inputmode="decimal" />
+        </label>
+      </div>
+      <button class="secondary-btn full" id="saveProfileBtn">Сохранить профиль</button>`;
+    el("saveProfileBtn").onclick=()=>{
+      state.profile={
+        name:el("profileName").value.trim(),
+        height:el("profileHeight").value,
+        weight:el("profileWeight").value,
+        saved:true
+      };
+      saveState();
+      render();
+    };
+  }
   const workouts=state.history.length;
   const reps=state.history.reduce((s,h)=>s+h.reps,0);
   const mins=Math.round(state.history.reduce((s,h)=>s+h.duration,0)/60);
@@ -246,6 +289,28 @@ function renderProfile(app){
     const row=document.createElement("div");row.className="stat-row";
     row.innerHTML=`<strong>${ex?.name||id}</strong><span>${n} повторений</span>`;box.append(row);
   });
+}
+function renderSettings(app){
+  app.append(cloneTemplate("settingsTemplate"));
+  el("editProfileBtn").onclick=()=>{route="profile-edit";render()};
+}
+function renderProfileEdit(app){
+  app.append(cloneTemplate("profileEditTemplate"));
+  el("profileName").value=state.profile.name||"";
+  el("profileHeight").value=state.profile.height||"";
+  el("profileWeight").value=state.profile.weight||"";
+  el("cancelProfileEditBtn").onclick=()=>{route="settings";render()};
+  el("saveProfileBtn").onclick=()=>{
+    state.profile={
+      name:el("profileName").value.trim(),
+      height:el("profileHeight").value,
+      weight:el("profileWeight").value,
+      saved:true
+    };
+    saveState();
+    route="profile";
+    render();
+  };
 }
 function formatTime(sec){const m=Math.floor(sec/60),s=Math.max(0,sec%60);return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]))}
