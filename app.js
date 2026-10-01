@@ -1,12 +1,43 @@
 const STORAGE_KEY="master_app_v1";
 
 const catalog=[
-  {id:"pushups",name:"Отжимания",type:"reps",defaultReps:12},
-  {id:"squats",name:"Приседания",type:"reps",defaultReps:15},
-  {id:"pullups",name:"Подтягивания",type:"reps",defaultReps:6},
-  {id:"crunches",name:"Скручивания",type:"reps",defaultReps:20},
-  {id:"plank",name:"Планка",type:"time",defaultSeconds:45},
-  {id:"lunges",name:"Выпады",type:"reps",defaultReps:12}
+  {id:"pushups",category:"arms",name:"Классические отжимания",type:"reps",defaultReps:12,description:"Грудь, трицепс и передняя дельта."},
+  {id:"diamond_pushups",category:"arms",name:"Узкие отжимания",type:"reps",defaultReps:8,description:"Акцент на трицепс; ладони ближе друг к другу."},
+  {id:"pike_pushups",category:"arms",name:"Отжимания уголком",type:"reps",defaultReps:8,description:"Плечи и верх корпуса; таз поднят вверх."},
+  {id:"chair_dips",category:"arms",name:"Обратные отжимания от стула",type:"reps",defaultReps:10,description:"Трицепс. Нужен устойчивый стул или край дивана."},
+  {id:"shoulder_taps",category:"arms",name:"Касания плеч в упоре",type:"reps",defaultReps:20,description:"Плечи, руки и стабилизация корпуса."},
+
+  {id:"squats",category:"legs",name:"Приседания",type:"reps",defaultReps:15,description:"Базовое упражнение на бёдра и ягодицы."},
+  {id:"reverse_lunges",category:"legs",name:"Выпады назад",type:"reps",defaultReps:12,description:"Поочерёдные выпады назад, нагрузка на ноги и ягодицы."},
+  {id:"glute_bridge",category:"legs",name:"Ягодичный мост",type:"reps",defaultReps:15,description:"Ягодицы и задняя поверхность бедра."},
+  {id:"calf_raises",category:"legs",name:"Подъёмы на носки",type:"reps",defaultReps:20,description:"Икры; можно выполнять у стены для баланса."},
+  {id:"wall_sit",category:"legs",name:"Стульчик у стены",type:"time",defaultSeconds:40,description:"Статическая нагрузка на квадрицепсы и ягодицы."},
+
+  {id:"crunches",category:"abs",name:"Скручивания",type:"reps",defaultReps:20,description:"Прямые мышцы живота."},
+  {id:"dead_bug",category:"abs",name:"Мёртвый жук",type:"reps",defaultReps:16,description:"Контроль корпуса и глубокие мышцы живота."},
+  {id:"bicycle",category:"abs",name:"Велосипед",type:"reps",defaultReps:20,description:"Пресс и косые мышцы живота."},
+  {id:"leg_raises",category:"abs",name:"Подъёмы ног лёжа",type:"reps",defaultReps:12,description:"Нижняя часть пресса и сгибатели бедра."},
+  {id:"plank",category:"abs",name:"Планка",type:"time",defaultSeconds:45,description:"Статическая работа всего корпуса."},
+
+  {id:"jumping_jacks",category:"cardio",name:"Джампинг-джек",type:"time",defaultSeconds:40,description:"Разогрев и повышение пульса."},
+  {id:"high_knees",category:"cardio",name:"Бег с высоким подниманием колен",type:"time",defaultSeconds:35,description:"Интенсивное кардио на месте."},
+  {id:"mountain_climbers",category:"cardio",name:"Альпинист",type:"time",defaultSeconds:35,description:"Кардио плюс нагрузка на корпус и плечи."},
+  {id:"skaters",category:"cardio",name:"Конькобежец",type:"time",defaultSeconds:40,description:"Боковые прыжки для координации и выносливости."},
+  {id:"shadow_boxing",category:"cardio",name:"Бой с тенью",type:"time",defaultSeconds:60,description:"Кардио без инвентаря; двигайся и работай руками."},
+
+  {id:"hamstring_stretch",category:"stretch",name:"Наклон к прямым ногам",type:"time",defaultSeconds:30,description:"Задняя поверхность бедра и поясница."},
+  {id:"quad_stretch",category:"stretch",name:"Растяжка квадрицепса стоя",type:"time",defaultSeconds:30,description:"Передняя поверхность бедра; поочерёдно на каждую ногу."},
+  {id:"chest_opener",category:"stretch",name:"Раскрытие грудных мышц",type:"time",defaultSeconds:30,description:"Грудь и передняя поверхность плеч."},
+  {id:"child_pose",category:"stretch",name:"Поза ребёнка",type:"time",defaultSeconds:40,description:"Спина, плечи и мягкое расслабление корпуса."},
+  {id:"hip_flexor_stretch",category:"stretch",name:"Растяжка сгибателей бедра",type:"time",defaultSeconds:30,description:"Глубокий выпад с мягким смещением таза вперёд."}
+];
+
+const catalogCategories=[
+  {id:"arms",name:"Руки",icon:"💪",description:"Руки, плечи и верх корпуса"},
+  {id:"legs",name:"Ноги",icon:"🦵",description:"Бёдра, ягодицы и икры"},
+  {id:"abs",name:"Пресс",icon:"◫",description:"Корпус и стабилизация"},
+  {id:"cardio",name:"Кардио",icon:"♥",description:"Пульс, выносливость и координация"},
+  {id:"stretch",name:"Растяжка",icon:"↔",description:"Мобильность и восстановление"}
 ];
 
 const defaultState={
@@ -73,13 +104,8 @@ function renderBuilder(app){
   el("workoutName").value=builder.name;
   el("workoutName").oninput=e=>builder.name=e.target.value;
   el("backBtn").onclick=()=>{route="workout";render()};
-  const cat=el("exerciseCatalog");
-  catalog.forEach(ex=>{
-    const card=document.createElement("button"); card.className="catalog-card";
-    card.innerHTML=`<strong>${ex.name}</strong><span>${ex.type==="time"?"по времени":"на повторения"}</span>`;
-    card.onclick=()=>{addExercise(ex);renderBuilderList()};
-    cat.append(card);
-  });
+  renderExerciseCatalog();
+
   renderBuilderList();
   el("saveWorkoutBtn").onclick=saveBuilder;
   el("startWorkoutBtn").onclick=()=>{
@@ -87,11 +113,58 @@ function renderBuilder(app){
     saveBuilder(false); startSession(JSON.parse(JSON.stringify(builder)));
   };
 }
+function renderExerciseCatalog(){
+  const cat=el("exerciseCatalog");
+  cat.innerHTML="";
+  catalogCategories.forEach((category,index)=>{
+    const section=document.createElement("div");
+    section.className="catalog-category";
+    section.innerHTML=`
+      <button class="category-header" type="button">
+        <div class="category-title-wrap">
+          <span class="category-icon">${category.icon}</span>
+          <div>
+            <strong>${category.name}</strong>
+            <span>${category.description}</span>
+          </div>
+        </div>
+        <span class="category-chevron">${index===0?"−":"+"}</span>
+      </button>
+      <div class="category-content ${index===0?"open":""}"></div>
+    `;
+    const content=section.querySelector(".category-content");
+    catalog.filter(ex=>ex.category===category.id).forEach(ex=>{
+      const card=document.createElement("button");
+      card.className="exercise-option";
+      card.type="button";
+      card.innerHTML=`
+        <div>
+          <strong>${ex.name}</strong>
+          <span>${ex.description}</span>
+        </div>
+        <div class="exercise-option-meta">
+          <small>${ex.type==="time"?(ex.defaultSeconds+" сек"):(ex.defaultReps+" повт.")}</small>
+          <b>+</b>
+        </div>
+      `;
+      card.onclick=()=>{addExercise(ex);renderBuilderList()};
+      content.append(card);
+    });
+    section.querySelector(".category-header").onclick=()=>{
+      const isOpen=content.classList.toggle("open");
+      section.querySelector(".category-chevron").textContent=isOpen?"−":"+";
+    };
+    cat.append(section);
+  });
+}
 function addExercise(ex){
   builder.exercises.push({
     uid:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),
     id:ex.id,name:ex.name,type:ex.type,
-    reps:ex.defaultReps||0,seconds:ex.defaultSeconds||30,sets:3,rest:45
+    reps:ex.defaultReps||0,seconds:ex.defaultSeconds||30,
+    sets:ex.category==="stretch"?1:3,
+    rest:ex.category==="stretch"?15:(ex.category==="cardio"?30:45),
+    category:ex.category
   });
 }
 function renderBuilderList(){
