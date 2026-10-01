@@ -1,0 +1,9 @@
+{
+  "name":"MASTER",
+  "short_name":"MASTER",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#111113",
+  "theme_color":"#111113",
+  "description":"Персональный конструктор тренировок и трекер повторений."
+}
