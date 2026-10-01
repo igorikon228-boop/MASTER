@@ -29,6 +29,10 @@
         <span class="nav-icon">●</span>
         <span>Профиль</span>
       </button>
+      <button class="nav-btn" data-route="settings">
+        <span class="nav-icon">⚙</span>
+        <span>Настройки</span>
+      </button>
     </nav>
   </div>
 
@@ -145,23 +149,7 @@
         </div>
       </div>
 
-      <div class="profile-card">
-        <label class="field">
-          <span>Имя</span>
-          <input id="profileName" type="text" maxlength="40" placeholder="Твоё имя" />
-        </label>
-        <div class="two-col">
-          <label class="field">
-            <span>Рост, см</span>
-            <input id="profileHeight" type="number" min="100" max="250" inputmode="numeric" />
-          </label>
-          <label class="field">
-            <span>Вес, кг</span>
-            <input id="profileWeight" type="number" min="30" max="300" step="0.1" inputmode="decimal" />
-          </label>
-        </div>
-        <button class="secondary-btn full" id="saveProfileBtn">Сохранить профиль</button>
-      </div>
+      <div class="profile-card" id="profileCard"></div>
 
       <section class="section">
         <h3>Общая статистика</h3>
@@ -187,6 +175,52 @@
         </div>
         <div id="exerciseStats" class="stack"></div>
       </section>
+    </section>
+  </template>
+
+  <template id="settingsTemplate">
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="muted">Управление приложением</p>
+          <h2>Настройки</h2>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <div>
+          <h3>Профиль</h3>
+          <p class="muted small">Измени имя, рост или вес.</p>
+        </div>
+        <button class="secondary-btn full" id="editProfileBtn">Редактировать профиль</button>
+      </div>
+    </section>
+  </template>
+
+  <template id="profileEditTemplate">
+    <section class="page">
+      <div class="page-head">
+        <button class="text-btn" id="cancelProfileEditBtn">← Назад</button>
+        <h2>Редактировать профиль</h2>
+      </div>
+
+      <div class="profile-card">
+        <label class="field">
+          <span>Имя</span>
+          <input id="profileName" type="text" maxlength="40" placeholder="Твоё имя" />
+        </label>
+        <div class="two-col">
+          <label class="field">
+            <span>Рост, см</span>
+            <input id="profileHeight" type="number" min="100" max="250" inputmode="numeric" />
+          </label>
+          <label class="field">
+            <span>Вес, кг</span>
+            <input id="profileWeight" type="number" min="30" max="300" step="0.1" inputmode="decimal" />
+          </label>
+        </div>
+        <button class="primary-btn full" id="saveProfileBtn">Сохранить изменения</button>
+      </div>
     </section>
   </template>
 
