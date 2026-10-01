@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#111111" />
+  <title>MASTER</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">PERSONAL TRAINING</div>
+        <h1>MASTER</h1>
+      </div>
+      <button class="icon-btn" id="resetDemoBtn" aria-label="Сбросить демо-данные">↺</button>
+    </header>
+
+    <main id="app"></main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-route="workout">
+        <span class="nav-icon">◉</span>
+        <span>Тренировка</span>
+      </button>
+      <button class="nav-btn" data-route="profile">
+        <span class="nav-icon">●</span>
+        <span>Профиль</span>
+      </button>
+    </nav>
+  </div>
+
+  <template id="workoutTemplate">
+    <section class="page">
+      <div class="hero-card">
+        <div>
+          <p class="muted">Готов к работе?</p>
+          <h2>Собери свою тренировку</h2>
+        </div>
+        <button class="primary-btn" id="createWorkoutBtn">Создать тренировку</button>
+      </div>
+
+      <section class="section">
+        <div class="section-head">
+          <h3>Сохранённые тренировки</h3>
+          <span class="badge" id="savedWorkoutCount">0</span>
+        </div>
+        <div id="savedWorkouts" class="stack"></div>
+      </section>
+    </section>
+  </template>
+
+  <template id="builderTemplate">
+    <section class="page">
+      <div class="page-head">
+        <button class="text-btn" id="backBtn">← Назад</button>
+        <h2>Конструктор</h2>
+      </div>
+
+      <label class="field">
+        <span>Название тренировки</span>
+        <input id="workoutName" type="text" maxlength="40" placeholder="Например, Утро" />
+      </label>
+
+      <section class="section">
+        <div class="section-head">
+          <h3>Каталог упражнений</h3>
+          <span class="muted small">Нажми, чтобы добавить</span>
+        </div>
+        <div id="exerciseCatalog" class="catalog"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h3>Моя тренировка</h3>
+          <span class="muted small">Перетаскивай блоки</span>
+        </div>
+        <div id="builderList" class="stack"></div>
+      </section>
+
+      <div class="sticky-actions">
+        <button class="secondary-btn" id="saveWorkoutBtn">Сохранить</button>
+        <button class="primary-btn" id="startWorkoutBtn">Старт</button>
+      </div>
+    </section>
+  </template>
+
+  <template id="sessionTemplate">
+    <section class="page session-page">
+      <div class="session-progress">
+        <span id="sessionStep">Упражнение 1 из 1</span>
+        <span id="sessionTimer">00:00</span>
+      </div>
+
+      <div class="session-card">
+        <p class="muted" id="sessionPhase">Подход</p>
+        <h2 id="sessionExercise">Отжимания</h2>
+        <div class="big-number" id="sessionTarget">10</div>
+        <p class="muted" id="sessionUnit">повторений</p>
+        <p id="sessionSet">Подход 1 из 3</p>
+      </div>
+
+      <div class="session-controls">
+        <button class="secondary-btn" id="pauseWorkoutBtn">Пауза</button>
+        <button class="primary-btn" id="completeStepBtn">Готово</button>
+      </div>
+
+      <button class="danger-link" id="finishWorkoutBtn">Завершить тренировку</button>
+    </section>
+  </template>
+
+  <template id="resultTemplate">
+    <section class="page">
+      <div class="result-card">
+        <div class="result-icon">✓</div>
+        <p class="muted">Тренировка завершена</p>
+        <h2 id="resultTitle">Готово</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <strong id="resultDuration">0:00</strong>
+            <span>время</span>
+          </div>
+          <div class="stat-card">
+            <strong id="resultReps">0</strong>
+            <span>повторений</span>
+          </div>
+          <div class="stat-card">
+            <strong id="resultExercises">0</strong>
+            <span>упражнений</span>
+          </div>
+        </div>
+        <button class="primary-btn full" id="resultDoneBtn">В MASTER</button>
+      </div>
+    </section>
+  </template>
+
+  <template id="profileTemplate">
+    <section class="page">
+      <div class="page-head">
+        <div>
+          <p class="muted">Твой прогресс</p>
+          <h2>Профиль</h2>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <label class="field">
+          <span>Имя</span>
+          <input id="profileName" type="text" maxlength="40" placeholder="Твоё имя" />
+        </label>
+        <div class="two-col">
+          <label class="field">
+            <span>Рост, см</span>
+            <input id="profileHeight" type="number" min="100" max="250" inputmode="numeric" />
+          </label>
+          <label class="field">
+            <span>Вес, кг</span>
+            <input id="profileWeight" type="number" min="30" max="300" step="0.1" inputmode="decimal" />
+          </label>
+        </div>
+        <button class="secondary-btn full" id="saveProfileBtn">Сохранить профиль</button>
+      </div>
+
+      <section class="section">
+        <h3>Общая статистика</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <strong id="statWorkouts">0</strong>
+            <span>тренировок</span>
+          </div>
+          <div class="stat-card">
+            <strong id="statReps">0</strong>
+            <span>повторений</span>
+          </div>
+          <div class="stat-card">
+            <strong id="statMinutes">0</strong>
+            <span>минут</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h3>По упражнениям</h3>
+        </div>
+        <div id="exerciseStats" class="stack"></div>
+      </section>
+    </section>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
